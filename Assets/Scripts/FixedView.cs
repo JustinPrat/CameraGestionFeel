@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,5 +13,10 @@ public class FixedView : AView
     public override CameraConfiguration GetConfiguration()
     {
         return new CameraConfiguration() { Yaw = Yaw, Pitch = Pitch, Roll = Roll, FOV = FOV, Pivot = transform.position, Distance = 0 };
+    }
+
+    private void OnDrawGizmos()
+    {
+        GetConfiguration().DrawGizmos(Color.blue);
     }
 }

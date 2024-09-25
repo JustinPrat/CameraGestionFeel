@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class AView : MonoBehaviour
 {
-    public float Weight;
+    [Min(1f)]
+    public float Weight = 1f;
     public bool IsActiveOnStart;
 
     public abstract CameraConfiguration GetConfiguration();
