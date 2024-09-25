@@ -7,7 +7,8 @@ public class CameraController : MonoBehaviour
     public static CameraController Instance;
 
     public Camera Camera;
-    public CameraConfiguration CameraConfiguration;
+    private CameraConfiguration m_cameraConfiguration;
+    private List<AView> m_activeViews = new List<AView>();
 
     private void Awake()
     {
@@ -21,10 +22,23 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    public void AddView(AView view)
+    {
+        if (!m_activeViews.Contains(view))
+        {
+            m_activeViews.Add(view);
+        }
+    }
+
+    public void RemoveView(AView view)
+    {
+        m_activeViews.Remove(view);
+    }
+
     private void ApplyConfiguration()
     {
-        Camera.transform.rotation = CameraConfiguration.GetRotation();
-        Camera.transform.position = CameraConfiguration.GetPosition();
+        Camera.transform.rotation = m_cameraConfiguration.GetRotation();
+        Camera.transform.position = m_cameraConfiguration.GetPosition();
     }
 
     private void Update()
@@ -34,6 +48,6 @@ public class CameraController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        CameraConfiguration.DrawGizmos(Color.red);
+        m_cameraConfiguration.DrawGizmos(Color.red);
     }
 }
