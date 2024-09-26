@@ -1,14 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraController : MonoBehaviour
 {
     public static CameraController Instance;
 
-    public Camera Camera;
+    [SerializeField]
+    private Camera m_camera;
     
-    private CameraConfiguration m_cameraConfiguration;
+    [Header("Smoothing Settings")]
+    [SerializeField, Range(0f, 100f)] private float m_smoothingSpeed = 0.5f;
+    [SerializeField, Min(0f)] private float m_minimumDistance = 0.01f;
+    
+    private CameraConfiguration m_targetCameraConfiguration;
+    private CameraConfiguration m_currentCameraConfiguration;
     private List<AView> m_activeViews = new List<AView>();
 
     private void Awake()
@@ -23,10 +31,38 @@ public class CameraController : MonoBehaviour
         }
     }
 
-        
+    private void Start()
+    {
+        m_currentCameraConfiguration = new CameraConfiguration()
+        {
+            FOV = m_camera.fieldOfView,
+            Roll = m_camera.transform.eulerAngles.x,
+            Yaw = m_camera.transform.eulerAngles.y,
+            Pitch = m_camera.transform.eulerAngles.z,
+            Pivot = m_camera.transform.position,
+            Distance = 0f,
+        };
+    }
+
     private void Update()
     {
-        m_cameraConfiguration = ComputeAverage();
+        m_targetCameraConfiguration = ComputeAverage();
+        if (m_smoothingSpeed * Time.deltaTime < 1)
+        {
+            m_currentCameraConfiguration = new CameraConfiguration()
+            {
+                FOV = m_currentCameraConfiguration.FOV + (m_targetCameraConfiguration.FOV - m_currentCameraConfiguration.FOV) * (Time.deltaTime * m_smoothingSpeed),
+                Roll = m_currentCameraConfiguration.Roll + (m_targetCameraConfiguration.Roll - m_currentCameraConfiguration.Roll) * (Time.deltaTime * m_smoothingSpeed),
+                Pitch = m_currentCameraConfiguration.Pitch + (m_targetCameraConfiguration.Pitch - m_currentCameraConfiguration.Pitch) * (Time.deltaTime * m_smoothingSpeed),
+                Yaw = m_currentCameraConfiguration.Yaw + (m_targetCameraConfiguration.Yaw - m_currentCameraConfiguration.Yaw) * (Time.deltaTime * m_smoothingSpeed),
+                Distance = m_currentCameraConfiguration.Distance + (m_targetCameraConfiguration.Distance - m_currentCameraConfiguration.Distance) * (Time.deltaTime * m_smoothingSpeed),
+                Pivot = m_currentCameraConfiguration.Pivot + (m_targetCameraConfiguration.Pivot - m_currentCameraConfiguration.Pivot) * (Time.deltaTime * m_smoothingSpeed),
+            };
+        }
+        else
+        {
+            m_currentCameraConfiguration = m_targetCameraConfiguration;
+        }
     }
     
     private void LateUpdate()
@@ -49,8 +85,9 @@ public class CameraController : MonoBehaviour
 
     private void ApplyConfiguration()
     {
-        Camera.transform.rotation = m_cameraConfiguration.GetRotation();
-        Camera.transform.position = m_cameraConfiguration.GetPosition();
+        m_camera.transform.rotation = m_currentCameraConfiguration.GetRotation();
+        m_camera.transform.position = m_currentCameraConfiguration.GetPosition();
+        m_camera.fieldOfView = m_currentCameraConfiguration.FOV;
     }
 
     private CameraConfiguration ComputeAverage()
@@ -74,7 +111,7 @@ public class CameraController : MonoBehaviour
             sumYaw += new Vector2(Mathf.Cos(viewConfig.Yaw * Mathf.Deg2Rad),
                 Mathf.Sin(viewConfig.Yaw * Mathf.Deg2Rad)) * view.Weight;
         }
-        cameraConfig.Yaw = Vector2.SignedAngle(Vector2.right, sumYaw) / weightTotal;
+        cameraConfig.Yaw = Vector2.SignedAngle(Vector2.right, sumYaw);
         cameraConfig.Distance /= weightTotal;
         cameraConfig.FOV /= weightTotal;
         cameraConfig.Pivot /= weightTotal;
@@ -85,6 +122,6 @@ public class CameraController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        m_cameraConfiguration.DrawGizmos(Color.red);
+        m_targetCameraConfiguration.DrawGizmos(Color.red);
     }
 }
