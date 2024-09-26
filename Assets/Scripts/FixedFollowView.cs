@@ -14,15 +14,23 @@ public class FixedFollowView : AView
     
     public override CameraConfiguration GetConfiguration()
     {
-        Vector3 direction = (m_target.position - transform.position).normalized;
-        // Vector3 centralPointYaw = 
-        // float angle = Vector3.Angle(m_centralPoint.position - transform.position, direction);
+        Vector3 targetDirection = (m_target.position - transform.position).normalized;
+        float targetYaw = Mathf.Atan2(targetDirection.x, targetDirection.z) * Mathf.Rad2Deg;
+        float targetPitch = -Mathf.Asin(targetDirection.y) * Mathf.Rad2Deg;
+        if (m_centralPoint)
+        {
+            Vector3 centerDirection = (m_centralPoint.position - transform.position).normalized;
+            float centerYaw = Mathf.Atan2(centerDirection.x, centerDirection.z) * Mathf.Rad2Deg;
+            float centerPitch = -Mathf.Asin(centerDirection.y) * Mathf.Rad2Deg;
+            targetPitch = Mathf.Clamp(targetPitch, centerPitch - m_pitchOffsetMax, centerPitch + m_pitchOffsetMax);
+            targetYaw = centerYaw + Mathf.Clamp(Mathf.DeltaAngle(centerYaw, targetYaw), -m_yawOffsetMax, m_yawOffsetMax);
+        }
         return new CameraConfiguration()
         {
             Roll = m_roll,
             FOV = m_FOV,
-            // Yaw = Mathf.Clamp(Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg, ),
-            Pitch = -Mathf.Asin(direction.y) * Mathf.Rad2Deg,
+            Yaw = targetYaw,
+            Pitch = targetPitch,
             Distance = 0,
             Pivot = transform.position,
         };
