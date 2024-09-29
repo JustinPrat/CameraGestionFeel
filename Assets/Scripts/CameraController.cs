@@ -12,8 +12,7 @@ public class CameraController : MonoBehaviour
     private Camera m_camera;
     
     [Header("Smoothing Settings")]
-    [SerializeField, Range(0f, 100f)] private float m_smoothingSpeed = 0.5f;
-    [SerializeField, Min(0f)] private float m_minimumDistance = 0.01f;
+    [SerializeField, Range(0f, 1f)] private float m_smoothingSpeed = 0.5f;
     
     private CameraConfiguration m_targetCameraConfiguration;
     private CameraConfiguration m_currentCameraConfiguration;
