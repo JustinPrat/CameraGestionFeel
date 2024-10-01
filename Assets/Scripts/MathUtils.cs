@@ -18,12 +18,12 @@ public static class MathUtils
     public static Vector3 QuadraticBezier(Vector3 a, Vector3 b, Vector3 c, float t)
     {
         t = Mathf.Clamp01(t);
-        return (1 - t) * LinearBezier(a, b, t) + t * LinearBezier(b, c, t);
+        return (1 - t) * ((1 - t) * a + t * b) + t * ((1 - t) * b + t * c);
     }
     
     public static Vector3 CubicBezier(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
     {
         t = Mathf.Clamp01(t);
-        return (1 - t) * QuadraticBezier(a, b, c, t) + t * QuadraticBezier(b, c, d, t);
+        return (1 - t) * ((1 - t) * ((1 - t) * a + t * b) + t * ((1 - t) * b + t * c)) + t * ((1 - t) * ((1 - t) * b + t * c) + t * ((1 - t) * c + t * d));
     }
 }
