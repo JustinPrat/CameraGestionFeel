@@ -34,11 +34,25 @@ public class FreeFollowView : AView
     [SerializeField] private float m_curveSpeed;
 
     private float m_yaw;
-    [SerializeField, Range(0f, 1f)] private float m_curvePosition;
+    private float m_curvePosition = .5f;
+
+    Matrix4x4 LocalToWorldMatrix => Matrix4x4.TRS(m_target.position, m_target.rotation, Vector3.one);
+
+    protected override void Start()
+    {
+        base.Start();
+        m_yaw = Vector3.Angle(m_target.position - m_curve.GetPosition(0.5f, LocalToWorldMatrix), Vector3.forward);
+    }
+
+    private void Update()
+    {
+        m_yaw += Input.GetAxis("Horizontal") * m_yawSpeed * Time.deltaTime;
+        m_target.rotation = Quaternion.Euler(0, m_yaw, 0);
+        m_curvePosition = Mathf.Clamp01(m_curvePosition + Input.GetAxis("Vertical") * m_curveSpeed * Time.deltaTime);
+    }
     
     public override CameraConfiguration GetConfiguration()
     {
-        float yaw = Vector3.SignedAngle(m_target.position - m_curve.GetPosition(0.5f, m_target.localToWorldMatrix), -m_target.transform.forward, Vector3.up);
         FreeFollowPosition followPosition = (m_curvePosition < .5f) ? FreeFollowPosition.Lerp(m_bottomPosition, m_middlePosition, m_curvePosition * 2) 
             : FreeFollowPosition.Lerp(m_middlePosition, m_topPosition, m_curvePosition * 2 - 1f);
         return new CameraConfiguration()
@@ -46,8 +60,8 @@ public class FreeFollowView : AView
             FOV = followPosition.FOV,
             Pitch = followPosition.Pitch,
             Roll = followPosition.Roll,
-            Pivot = m_curve.GetPosition(m_curvePosition, m_target.localToWorldMatrix),
-            Yaw = yaw,
+            Pivot = m_curve.GetPosition(m_curvePosition, LocalToWorldMatrix),
+            Yaw = m_yaw,
         };
     }
 
@@ -55,33 +69,32 @@ public class FreeFollowView : AView
     {
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        float yaw = Vector3.SignedAngle(m_target.position - m_curve.GetPosition(0.5f, m_target.localToWorldMatrix), -m_target.transform.forward, Vector3.up);
         new CameraConfiguration()
         {
             FOV = m_bottomPosition.FOV,
             Pitch = m_bottomPosition.Pitch,
             Roll = m_bottomPosition.Roll,
-            Pivot = m_curve.GetPosition(0f, m_target.localToWorldMatrix),
-            Yaw = yaw,
+            Pivot = m_curve.GetPosition(0f, LocalToWorldMatrix),
+            Yaw = m_yaw,
         }.DrawGizmos(Color.green);  
         new CameraConfiguration()
         {
             FOV = m_middlePosition.FOV,
             Pitch = m_middlePosition.Pitch,
             Roll = m_middlePosition.Roll,
-            Pivot = m_curve.GetPosition(0.5f, m_target.localToWorldMatrix),
-            Yaw = yaw,
+            Pivot = m_curve.GetPosition(0.5f, LocalToWorldMatrix),
+            Yaw = m_yaw,
         }.DrawGizmos(Color.yellow);
         new CameraConfiguration()
         {
             FOV = m_topPosition.FOV,
             Pitch = m_topPosition.Pitch,
             Roll = m_topPosition.Roll,
-            Pivot = m_curve.GetPosition(1f, m_target.localToWorldMatrix),
-            Yaw = yaw,
+            Pivot = m_curve.GetPosition(1f, LocalToWorldMatrix),
+            Yaw = m_yaw,
         }.DrawGizmos(Color.red);
-        m_curve.DrawGizmos(Color.blue, m_target.localToWorldMatrix);
+        m_curve.DrawGizmos(Color.blue, LocalToWorldMatrix);
     }
 }

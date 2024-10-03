@@ -10,7 +10,7 @@ public abstract class AView : MonoBehaviour
 
     public abstract CameraConfiguration GetConfiguration();
 
-    private void Start()
+    protected virtual void Start()
     {
         SetupConfiguration();
         SetActive(IsActiveOnStart);

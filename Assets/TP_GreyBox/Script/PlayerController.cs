@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
 	public float speed = 10.0f;
 
-	Rigidbody _rigidbody = null;
-	protected bool IsActive { get; private set; }
+	Rigidbody _rigidbody;
 
 	public void Awake()
 	{

@@ -50,7 +50,7 @@ public class CameraController : MonoBehaviour
                 FOV = m_currentCameraConfiguration.FOV + (m_targetCameraConfiguration.FOV - m_currentCameraConfiguration.FOV) * (Time.deltaTime * m_smoothingSpeed),
                 Roll = m_currentCameraConfiguration.Roll + (m_targetCameraConfiguration.Roll - m_currentCameraConfiguration.Roll) * (Time.deltaTime * m_smoothingSpeed),
                 Pitch = m_currentCameraConfiguration.Pitch + (m_targetCameraConfiguration.Pitch - m_currentCameraConfiguration.Pitch) * (Time.deltaTime * m_smoothingSpeed),
-                Yaw = m_currentCameraConfiguration.Yaw + (m_targetCameraConfiguration.Yaw - m_currentCameraConfiguration.Yaw) * (Time.deltaTime * m_smoothingSpeed),
+                Yaw = m_currentCameraConfiguration.Yaw + Mathf.DeltaAngle(m_currentCameraConfiguration.Yaw, m_targetCameraConfiguration.Yaw) * (Time.deltaTime * m_smoothingSpeed),
                 Distance = m_currentCameraConfiguration.Distance + (m_targetCameraConfiguration.Distance - m_currentCameraConfiguration.Distance) * (Time.deltaTime * m_smoothingSpeed),
                 Pivot = m_currentCameraConfiguration.Pivot + (m_targetCameraConfiguration.Pivot - m_currentCameraConfiguration.Pivot) * (Time.deltaTime * m_smoothingSpeed),
             };
