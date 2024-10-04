@@ -32,6 +32,7 @@ public class FreeFollowView : AView
     [SerializeField] private Transform m_target;
     [SerializeField] private float m_yawSpeed;
     [SerializeField] private float m_curveSpeed;
+    [SerializeField] private LayerMask m_layerMask;
 
     private float m_yaw;
     private float m_curvePosition = .5f;
@@ -55,12 +56,17 @@ public class FreeFollowView : AView
     {
         FreeFollowPosition followPosition = (m_curvePosition < .5f) ? FreeFollowPosition.Lerp(m_bottomPosition, m_middlePosition, m_curvePosition * 2) 
             : FreeFollowPosition.Lerp(m_middlePosition, m_topPosition, m_curvePosition * 2 - 1f);
+        Vector3 position = m_curve.GetPosition(m_curvePosition, LocalToWorldMatrix);
+        if (Physics.Linecast(m_target.position, position, out RaycastHit hit, m_layerMask))
+        {
+            position = hit.point + (m_target.position - position).normalized * .5f;
+        }
         return new CameraConfiguration()
         {
             FOV = followPosition.FOV,
             Pitch = followPosition.Pitch,
             Roll = followPosition.Roll,
-            Pivot = m_curve.GetPosition(m_curvePosition, LocalToWorldMatrix),
+            Pivot = position,
             Yaw = m_yaw,
         };
     }
