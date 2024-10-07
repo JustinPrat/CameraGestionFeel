@@ -26,6 +26,17 @@ public struct CameraConfiguration
 
     public Vector3 GetPosition() => Pivot + GetRotation() * (Vector3.back * Distance);
 
+    public static CameraConfiguration operator - (CameraConfiguration left, CameraConfiguration right)
+    {
+        left.Yaw = Mathf.DeltaAngle(left.Yaw, right.Yaw);
+        left.Pitch -= right.Pitch;
+        left.Roll -= right.Roll;
+        left.Distance -= right.Distance;
+        left.FOV -= right.FOV;
+        left.Pivot -= right.Pivot;
+        return left;
+    }
+
     public void DrawGizmos(Color color)
     {
         Gizmos.color = color;

@@ -13,4 +13,9 @@ public class FixedView : AView
     {
         return new CameraConfiguration() { Yaw = Yaw, Pitch = Pitch, Roll = Roll, FOV = FOV, Pivot = transform.position, Distance = 0 };
     }
+
+    private void OnDrawGizmos()
+    {
+        GetConfiguration().DrawGizmos(Color.green);
+    }
 }
