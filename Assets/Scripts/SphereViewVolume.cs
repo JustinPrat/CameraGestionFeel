@@ -44,8 +44,9 @@ public class SphereViewVolume : AViewVolume
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0.1f, 0.5f, 0.6f, 0.2f);
+        Gizmos.color = new Color(0.5f, 0.1f, 0.2f, 0.4f);
         Gizmos.DrawSphere(transform.position, InnerRadius);
+        Gizmos.color = new Color(0.1f, 0.5f, 0.6f, 0.2f);
         Gizmos.DrawSphere(transform.position, OuterRadius);
     }
 }
