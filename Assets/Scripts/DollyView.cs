@@ -13,7 +13,7 @@ public class DollyView : AView
     [SerializeField] private bool m_isAuto;
     
     private float m_distanceOnRail;
-
+    
     private void Update()
     {
         if (!m_isAuto)

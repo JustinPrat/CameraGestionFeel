@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,10 +18,30 @@ public class ViewVolumeBlender : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            return;
         }
     }
 
+    private void Update()
+    {
+        List<AViewVolume> allVolumes = new List<AViewVolume>();
+        foreach (AViewVolume viewVolume in m_activeViewVolumes)
+        {
+            viewVolume.View.Weight = 0;
+            allVolumes.Add(viewVolume);
+        }
+        allVolumes.Sort();
+        float totalWeight = 1f;
+        foreach (AViewVolume volume in allVolumes)
+        {
+            volume.View.Weight = volume.ComputeSelfWeight(totalWeight);
+            totalWeight -= volume.View.Weight;
+        }
+        totalWeight = 1f - totalWeight;
+        foreach (AViewVolume volume in allVolumes)
+        {
+            volume.View.Weight *= totalWeight;
+        }
+    }
 
     public void AddVolume(AViewVolume volume)
     {
@@ -49,6 +68,14 @@ public class ViewVolumeBlender : MonoBehaviour
                  volume.View.SetActive(false);
                  m_volumePerViews.Remove(volume.View);
              }
+        }
+    }
+
+    private void OnGUI()
+    {
+        foreach (AViewVolume volume in m_activeViewVolumes)
+        {
+            GUILayout.Label(volume.GetType().Name + " : " +volume.name);
         }
     }
 }

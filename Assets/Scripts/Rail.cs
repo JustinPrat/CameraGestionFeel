@@ -48,11 +48,13 @@ public class Rail : MonoBehaviour
         Vector3 closestPoint = position;
         for (int i = 0; i < m_railPoints.Count - (m_isLoop ? 0 : 1); i++)
         {
-            float distance = Vector3.Distance(m_railPoints[i].position, m_railPoints[(i + 1) % m_railPoints.Count].position);
+            Vector3 pointOnSegment = MathUtils.GetNearestPointOnSegment(m_railPoints[i].position,
+                m_railPoints[(i + 1) % m_railPoints.Count].position, position);
+            float distance = Vector3.Distance(position, pointOnSegment);
             if (distance < minDistance)
             {
                 minDistance = distance;
-                closestPoint = MathUtils.GetNearestPointOnSegment(m_railPoints[i].position, m_railPoints[(i + 1) % m_railPoints.Count].position, position);
+                closestPoint = pointOnSegment;
             }
         }
         return closestPoint;

@@ -39,8 +39,8 @@ public class CameraController : MonoBehaviour
             Distance = 0f,
         };
     }
-
-    private void Update()
+    
+    private void LateUpdate()
     {
         m_targetCameraConfiguration = ComputeAverage();
         if (m_smoothingSpeed * Time.deltaTime < 1)
@@ -59,10 +59,6 @@ public class CameraController : MonoBehaviour
         {
             m_currentCameraConfiguration = m_targetCameraConfiguration;
         }
-    }
-    
-    private void LateUpdate()
-    {
         ApplyConfiguration();
     }
     

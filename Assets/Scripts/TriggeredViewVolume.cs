@@ -4,8 +4,6 @@ using UnityEngine;
 public class TriggeredViewVolume : AViewVolume
 {
     [SerializeField]
-    private Collider m_collider;
-    [SerializeField]
     private LayerMask m_layerMask;
     
     private void OnTriggerEnter(Collider other)

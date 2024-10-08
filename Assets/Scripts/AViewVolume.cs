@@ -1,26 +1,29 @@
+using System;
 using UnityEngine;
 
-public class AViewVolume : MonoBehaviour
+public class AViewVolume : MonoBehaviour, IComparable<AViewVolume>
 {
     [field:SerializeField]
     public int Priority { get; set; }
+    [field:SerializeField, Range(0f, 1f)]
+    public float WeightPercent { get; set; } 
     [field:SerializeField]
-    public AView View { get; set; }
+    public AView View { get; private set; }
+    
+    protected bool IsActive { get; private set; }
 
-    protected bool IsActive { get; private set; } = false;
+    public int UId { get; private set; }
 
-    private int m_uId;
+    private static int NextUid;
 
-    private static int NextUid = 0;
-
-    public virtual float ComputeSelfWeight()
+    public virtual float ComputeSelfWeight(float remainingWeight)
     {
-        return 1.0f;
+        return remainingWeight * WeightPercent;
     }
 
     private void Awake()
     {
-        m_uId = NextUid++;
+        UId = NextUid++;
     }
 
     protected void SetActive(bool isActive)
@@ -35,5 +38,11 @@ public class AViewVolume : MonoBehaviour
         {
             ViewVolumeBlender.Instance.RemoveVolume(this);
         }
+    }
+
+    public int CompareTo(AViewVolume other)
+    {
+        int priorityDiff = -Priority.CompareTo(other.Priority);
+        return priorityDiff != 0 ? priorityDiff : UId.CompareTo(other.UId);
     }
 }
