@@ -23,6 +23,11 @@ public class ViewVolumeBlender : MonoBehaviour
 
     private void Update()
     {
+        ApplyBlend();
+    }
+
+    public void ApplyBlend ()
+    {
         List<AViewVolume> allVolumes = new List<AViewVolume>();
         foreach (AViewVolume viewVolume in m_activeViewVolumes)
         {

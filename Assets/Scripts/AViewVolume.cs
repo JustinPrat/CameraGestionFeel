@@ -16,6 +16,8 @@ public class AViewVolume : MonoBehaviour, IComparable<AViewVolume>
 
     private static int NextUid;
 
+    [SerializeField] private bool m_isCutOnSwitch;
+
     public virtual float ComputeSelfWeight(float remainingWeight)
     {
         return remainingWeight * WeightPercent;
@@ -33,6 +35,11 @@ public class AViewVolume : MonoBehaviour, IComparable<AViewVolume>
         if (isActive)
         {
             ViewVolumeBlender.Instance.AddVolume(this);
+            if (m_isCutOnSwitch)
+            {
+                ViewVolumeBlender.Instance.ApplyBlend();
+                CameraController.Instance.Cut();
+            }
         }
         else
         {

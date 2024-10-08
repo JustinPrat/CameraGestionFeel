@@ -14,6 +14,7 @@ public class CameraController : MonoBehaviour
     private CameraConfiguration m_targetCameraConfiguration;
     private CameraConfiguration m_currentCameraConfiguration;
     private List<AView> m_activeViews = new List<AView>();
+    private bool m_isCutRequested;
 
     private void Awake()
     {
@@ -43,7 +44,7 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         m_targetCameraConfiguration = ComputeAverage();
-        if (m_smoothingSpeed * Time.deltaTime < 1)
+        if (m_smoothingSpeed * Time.deltaTime < 1 && !m_isCutRequested)
         {
             m_currentCameraConfiguration = new CameraConfiguration()
             {
@@ -58,8 +59,14 @@ public class CameraController : MonoBehaviour
         else
         {
             m_currentCameraConfiguration = m_targetCameraConfiguration;
+            m_isCutRequested = false;
         }
         ApplyConfiguration();
+    }
+
+    public void Cut ()
+    {
+        m_isCutRequested = true;
     }
     
     public void AddView(AView view)
