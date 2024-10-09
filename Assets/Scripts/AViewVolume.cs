@@ -3,12 +3,10 @@ using UnityEngine;
 
 public class AViewVolume : MonoBehaviour, IComparable<AViewVolume>
 {
-    [field:SerializeField]
-    public int Priority { get; set; }
-    [field:SerializeField, Range(0f, 1f)]
-    public float WeightPercent { get; set; } 
-    [field:SerializeField]
-    public AView View { get; private set; }
+    [field:SerializeField] public int Priority { get; set; }
+
+    [field: SerializeField, Range(0f, 1f)] public float WeightPercent { get; set; } = 1f;
+    [field:SerializeField] public AView View { get; private set; }
     
     protected bool IsActive { get; private set; }
 
@@ -30,7 +28,7 @@ public class AViewVolume : MonoBehaviour, IComparable<AViewVolume>
 
     protected void SetActive(bool isActive)
     {
-        if (IsActive == isActive) return;
+        if (IsActive == isActive || !View) return;
         IsActive = isActive;
         if (isActive)
         {

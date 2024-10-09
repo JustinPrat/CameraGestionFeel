@@ -46,9 +46,4 @@ public class DollyView : AView
             Pivot = position,
         };
     }
-
-    public override void SetupConfiguration()
-    {
-        m_roll = transform.rotation.eulerAngles.x;
-    }
 }

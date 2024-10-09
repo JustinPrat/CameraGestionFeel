@@ -39,9 +39,8 @@ public class FreeFollowView : AView
 
     Matrix4x4 LocalToWorldMatrix => Matrix4x4.TRS(m_target.position, m_target.rotation, Vector3.one);
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         m_yaw = Vector3.Angle(m_target.position - m_curve.GetPosition(0.5f, LocalToWorldMatrix), Vector3.forward);
     }
 
@@ -70,11 +69,7 @@ public class FreeFollowView : AView
             Yaw = m_yaw,
         };
     }
-
-    public override void SetupConfiguration()
-    {
-    }
-
+    
     private void OnDrawGizmos()
     {
         new CameraConfiguration()

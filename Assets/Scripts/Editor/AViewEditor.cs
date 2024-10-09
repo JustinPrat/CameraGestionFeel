@@ -13,10 +13,10 @@ public class FixedFollowViewEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
-        if (GUILayout.Button("Setup Configuration"))
+        DrawDefaultInspector();
+        if (GUILayout.Button("Generate Contraint Object"))
         {
-            m_Target.SetupConfiguration();
+            m_Target.GenerateContraintObject();
         }
     }
 }

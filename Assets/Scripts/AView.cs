@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AView : MonoBehaviour
@@ -8,13 +6,6 @@ public abstract class AView : MonoBehaviour
     public float Weight = 1f;
 
     public abstract CameraConfiguration GetConfiguration();
-
-    protected virtual void Start()
-    {
-        SetupConfiguration();
-    }
-
-    public abstract void SetupConfiguration();
     
     public void SetActive(bool isActive)
     {

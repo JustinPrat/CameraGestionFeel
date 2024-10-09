@@ -35,9 +35,14 @@ public class FixedFollowView : AView
             Pivot = transform.position,
         };
     }
-    
-    public override void SetupConfiguration()
+
+    public void GenerateContraintObject()
     {
-        m_roll = transform.rotation.eulerAngles.x;
+        if (!m_centralPoint)
+        {
+            m_centralPoint = new GameObject("CentralPoint").transform;
+            m_centralPoint.parent = transform.parent;
+            m_centralPoint.position = transform.position + Vector3.right;
+        }
     }
 }
