@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     private Camera m_camera;
     
     [Header("Smoothing Settings")]
-    [SerializeField, Range(0f, 1f)] private float m_smoothingSpeed = 0.5f;
+    [SerializeField, Min(0)] private float m_smoothingSpeed = 0.5f;
     
     private CameraConfiguration m_targetCameraConfiguration;
     private CameraConfiguration m_currentCameraConfiguration;
@@ -75,6 +75,11 @@ public class CameraController : MonoBehaviour
         {
             m_activeViews.Add(view);
         }
+    }
+
+    public Vector3 GetCameraDirection ()
+    {
+        return (m_currentCameraConfiguration.GetRotation() * Vector3.forward).normalized;
     }
 
     public void RemoveView(AView view)
