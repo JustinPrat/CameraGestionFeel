@@ -2,8 +2,7 @@ using UnityEngine;
 
 public abstract class AView : MonoBehaviour
 {
-    [Min(1f)]
-    public float Weight = 1f;
+    public float Weight { get; set; }
 
     public abstract CameraConfiguration GetConfiguration();
     

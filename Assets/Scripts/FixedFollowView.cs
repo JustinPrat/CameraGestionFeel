@@ -36,6 +36,7 @@ public class FixedFollowView : AView
         };
     }
 
+    #if UNITY_EDITOR
     public void GenerateContraintObject()
     {
         if (!m_centralPoint)
@@ -45,4 +46,14 @@ public class FixedFollowView : AView
             m_centralPoint.position = transform.position + Vector3.right;
         }
     }
+
+    public void DestroyConstraintObject()
+    {
+        if (m_centralPoint)
+        {
+            DestroyImmediate(m_centralPoint.gameObject);
+            m_centralPoint = null;
+        }
+    }
+    #endif
 }

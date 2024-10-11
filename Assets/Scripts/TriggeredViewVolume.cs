@@ -8,7 +8,7 @@ public class TriggeredViewVolume : AViewVolume
     
     private void OnTriggerEnter(Collider other)
     {
-        if (PhysicsUtils.IsLayerIsLayerMask(m_layerMask, other.gameObject.layer))
+        if (PhysicsUtils.IsLayerIsLayerMask(m_layerMask, other.gameObject.layer))   
         {
             SetActive(true);
         }

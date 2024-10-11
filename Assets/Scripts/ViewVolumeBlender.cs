@@ -43,10 +43,6 @@ public class ViewVolumeBlender : MonoBehaviour
             totalWeight -= volume.View.Weight;
         }
         totalWeight = 1f - totalWeight;
-        if (totalWeight <= 0f)
-        {
-            throw new DivideByZeroException("No volume with weight has been found in the scene, make sure there is one before playing to avoid division by zero.");
-        }
         foreach (AViewVolume volume in allVolumes)
         {
             volume.View.Weight *= totalWeight;

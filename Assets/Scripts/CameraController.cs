@@ -9,7 +9,11 @@ public class CameraController : MonoBehaviour
     private Camera m_camera;
     
     [Header("Smoothing Settings")]
-    [SerializeField, Range(0f, 1f)] private float m_smoothingSpeed = 0.5f;
+    [SerializeField] private float m_smoothingSpeed;
+    
+    [Header("Raycast Settings")]
+    [SerializeField] private Transform m_target;
+    [SerializeField] private LayerMask m_collisionsLayers;
     
     private CameraConfiguration m_targetCameraConfiguration;
     private CameraConfiguration m_currentCameraConfiguration;
@@ -44,6 +48,12 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         m_targetCameraConfiguration = ComputeAverage();
+        Vector3 position = m_targetCameraConfiguration.Pivot;
+        if (Physics.Linecast(m_target.position, position, out RaycastHit hit, m_collisionsLayers))
+        {
+            position = hit.point + (m_target.position - hit.point).normalized * .1f;
+        }
+        m_targetCameraConfiguration.Pivot = position;
         if (m_smoothingSpeed * Time.deltaTime < 1 && !m_isCutRequested)
         {
             m_currentCameraConfiguration = new CameraConfiguration()
@@ -89,6 +99,7 @@ public class CameraController : MonoBehaviour
         m_camera.fieldOfView = m_currentCameraConfiguration.FOV;
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private CameraConfiguration ComputeAverage()
     {
         if (m_activeViews.Count == 0)
@@ -109,6 +120,12 @@ public class CameraController : MonoBehaviour
             cameraConfig.Roll += viewConfig.Roll * view.Weight;
             sumYaw += new Vector2(Mathf.Cos(viewConfig.Yaw * Mathf.Deg2Rad),
                 Mathf.Sin(viewConfig.Yaw * Mathf.Deg2Rad)) * view.Weight;
+        }
+
+        if (weightTotal <= 0f)
+        {
+            Debug.LogError("No views has weight");
+            return new CameraConfiguration();
         }
         cameraConfig.Yaw = Vector2.SignedAngle(Vector2.right, sumYaw);
         cameraConfig.Distance /= weightTotal;

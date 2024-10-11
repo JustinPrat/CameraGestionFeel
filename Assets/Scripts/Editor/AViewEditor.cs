@@ -4,11 +4,11 @@ using UnityEngine;
 [CustomEditor(typeof(FixedFollowView)), CanEditMultipleObjects]
 public class FixedFollowViewEditor : Editor
 {
-    private FixedFollowView m_Target;
+    private FixedFollowView m_target;
     
     private void OnEnable()
     {
-        m_Target = (FixedFollowView)target;
+        m_target = (FixedFollowView)target;
     }
 
     public override void OnInspectorGUI()
@@ -16,7 +16,11 @@ public class FixedFollowViewEditor : Editor
         DrawDefaultInspector();
         if (GUILayout.Button("Generate Contraint Object"))
         {
-            m_Target.GenerateContraintObject();
+            m_target.GenerateContraintObject();
+        }
+        if (GUILayout.Button("Destroy Contraint Object"))
+        {
+            m_target.DestroyConstraintObject();
         }
     }
 }

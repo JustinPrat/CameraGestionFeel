@@ -32,12 +32,12 @@ public class FreeFollowView : AView
     [SerializeField] private Transform m_target;
     [SerializeField] private float m_yawSpeed;
     [SerializeField] private float m_curveSpeed;
-    [SerializeField] private LayerMask m_layerMask;
 
     private float m_yaw;
     private float m_curvePosition = .5f;
+    public Curve Curve => m_curve;
 
-    Matrix4x4 LocalToWorldMatrix => Matrix4x4.TRS(m_target.position, m_target.rotation, Vector3.one);
+    public Matrix4x4 LocalToWorldMatrix => Matrix4x4.TRS(m_target.position, m_target.rotation, Vector3.one);
 
     protected void Start()
     {
@@ -56,10 +56,6 @@ public class FreeFollowView : AView
         FreeFollowPosition followPosition = (m_curvePosition < .5f) ? FreeFollowPosition.Lerp(m_bottomPosition, m_middlePosition, m_curvePosition * 2) 
             : FreeFollowPosition.Lerp(m_middlePosition, m_topPosition, m_curvePosition * 2 - 1f);
         Vector3 position = m_curve.GetPosition(m_curvePosition, LocalToWorldMatrix);
-        if (Physics.Linecast(m_target.position, position, out RaycastHit hit, m_layerMask))
-        {
-            position = hit.point + (m_target.position - position).normalized * .5f;
-        }
         return new CameraConfiguration()
         {
             FOV = followPosition.FOV,
@@ -95,7 +91,8 @@ public class FreeFollowView : AView
             Roll = m_topPosition.Roll,
             Pivot = m_curve.GetPosition(1f, LocalToWorldMatrix),
             Yaw = m_yaw,
-        }.DrawGizmos(Color.red);
+        }.DrawGizmos(Color.magenta);
         m_curve.DrawGizmos(Color.blue, LocalToWorldMatrix);
+
     }
 }

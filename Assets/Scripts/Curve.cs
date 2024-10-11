@@ -4,8 +4,10 @@ using UnityEngine;
 [Serializable]
 public class Curve
 {
-    [SerializeField]
-    private Vector3 m_a, m_b, m_c, m_d;
+    [field:SerializeField] public Vector3 A { get; set; }
+    [field:SerializeField] public Vector3 B { get; set; }
+    [field:SerializeField] public Vector3 C { get; set; }
+    [field:SerializeField] public Vector3 D { get; set; }
     
     #if UNITY_EDITOR
     [SerializeField, Range(2, 50)] private int m_pointsNumber;
@@ -13,13 +15,13 @@ public class Curve
 
     public Vector3 GetPosition(float t)
     {
-        return MathUtils.CubicBezier(m_a, m_b, m_c, m_d, t);
+        return MathUtils.CubicBezier(A, B, C, D, t);
     }
     
     public Vector3 GetPosition(float t, Matrix4x4 localToWorldMatrix)
     {
-        return MathUtils.CubicBezier(localToWorldMatrix.MultiplyPoint(m_a), localToWorldMatrix.MultiplyPoint(m_b),
-            localToWorldMatrix.MultiplyPoint(m_c), localToWorldMatrix.MultiplyPoint(m_d), t);
+        return MathUtils.CubicBezier(localToWorldMatrix.MultiplyPoint(A), localToWorldMatrix.MultiplyPoint(B),
+            localToWorldMatrix.MultiplyPoint(C), localToWorldMatrix.MultiplyPoint(D), t);
     }
 
     public void DrawGizmos(Color color, Matrix4x4 localToWorldMatrix)
@@ -30,10 +32,10 @@ public class Curve
         {
             Gizmos.DrawLine(GetPosition(i / (float)m_pointsNumber, localToWorldMatrix), GetPosition((i + 1f) / m_pointsNumber, localToWorldMatrix));
         }
-        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(m_a), 0.2f);
-        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(m_b), 0.2f);
-        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(m_c), 0.2f);
-        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(m_d), 0.2f);
-#endif
+        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(A), 0.1f);
+        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(B), 0.1f);
+        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(C), 0.1f);
+        Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint(D), 0.1f);
+    #endif
     }
 }
