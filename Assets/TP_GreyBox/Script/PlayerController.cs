@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 	public void Awake()
 	{
 		_rigidbody = GetComponent<Rigidbody>();
+		Cursor.visible = false;
 	}
 
 	void FixedUpdate()

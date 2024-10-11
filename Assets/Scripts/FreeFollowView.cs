@@ -31,8 +31,9 @@ public class FreeFollowView : AView
     [SerializeField] private Curve m_curve;
     [SerializeField] private Transform m_target;
     [SerializeField] private float m_yawSpeed;
-    [SerializeField] private float m_curveSpeed;
-
+    [SerializeField] private float m_curveSensibility;
+    [SerializeField] private AnimationCurve m_speedCurve;
+    
     private float m_yaw;
     private float m_curvePosition = .5f;
     private Vector3 m_mousePos;
@@ -50,7 +51,7 @@ public class FreeFollowView : AView
         Vector2 deltaMouse = Input.mousePosition - m_mousePos;
         m_yaw += deltaMouse.x * m_yawSpeed * Time.deltaTime;
         m_target.rotation = Quaternion.Euler(0, m_yaw, 0);
-        m_curvePosition = Mathf.Clamp01(m_curvePosition + deltaMouse.y * m_curveSpeed * Time.deltaTime);
+        m_curvePosition = Mathf.Clamp01(m_curvePosition + deltaMouse.y * m_curveSensibility * Time.deltaTime * m_speedCurve.Evaluate(m_curvePosition));
 
         m_mousePos = Input.mousePosition;
     }
