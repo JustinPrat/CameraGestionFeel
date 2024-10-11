@@ -35,6 +35,7 @@ public class FreeFollowView : AView
 
     private float m_yaw;
     private float m_curvePosition = .5f;
+    private Vector3 m_mousePos;
     public Curve Curve => m_curve;
 
     public Matrix4x4 LocalToWorldMatrix => Matrix4x4.TRS(m_target.position, m_target.rotation, Vector3.one);
@@ -46,9 +47,12 @@ public class FreeFollowView : AView
 
     private void Update()
     {
-        m_yaw += Input.GetAxis("Horizontal") * m_yawSpeed * Time.deltaTime;
+        Vector2 deltaMouse = Input.mousePosition - m_mousePos;
+        m_yaw += deltaMouse.x * m_yawSpeed * Time.deltaTime;
         m_target.rotation = Quaternion.Euler(0, m_yaw, 0);
-        m_curvePosition = Mathf.Clamp01(m_curvePosition + Input.GetAxis("Vertical") * m_curveSpeed * Time.deltaTime);
+        m_curvePosition = Mathf.Clamp01(m_curvePosition + deltaMouse.y * m_curveSpeed * Time.deltaTime);
+
+        m_mousePos = Input.mousePosition;
     }
     
     public override CameraConfiguration GetConfiguration()

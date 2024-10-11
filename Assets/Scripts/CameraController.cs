@@ -87,6 +87,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    public Vector3 GetCameraDirection ()
+    {
+        return (m_currentCameraConfiguration.GetRotation() * Vector3.forward).normalized;
+    }
+
     public void RemoveView(AView view)
     {
         m_activeViews.Remove(view);
