@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ViewVolumeBlender))]
 public class CameraController : MonoBehaviour
 {
     public static CameraController Instance;

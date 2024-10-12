@@ -13,15 +13,15 @@ public class PlayerController : MonoBehaviour
 		Cursor.visible = false;
 	}
 
-	void FixedUpdate()
+	void Update()
     {
 		Vector3 camDir = CameraController.Instance.GetCameraDirection();
 		camDir.y = 0;
 		Vector3 rotatedCamDir = Quaternion.Euler(0, 90, 0) * camDir;
 
 		Vector3 direction = Vector3.zero;
-		direction += rotatedCamDir * (Input.GetAxisRaw("Horizontal") * Time.fixedDeltaTime);
-		direction += camDir * (Input.GetAxisRaw("Vertical") * Time.fixedDeltaTime);
+		direction += rotatedCamDir * (Input.GetAxisRaw("Horizontal") * Time.deltaTime);
+		direction += camDir * (Input.GetAxisRaw("Vertical") * Time.deltaTime);
 		direction.Normalize();
 		_rigidbody.velocity = direction * speed + Vector3.up * _rigidbody.velocity.y;
 

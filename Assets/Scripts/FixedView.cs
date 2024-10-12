@@ -8,7 +8,7 @@ public class FixedView : AView
     public float Yaw;
     public float Pitch;
     public float Roll;
-    public float FOV;
+    public float FOV = 90;
 
     public override CameraConfiguration GetConfiguration()
     {

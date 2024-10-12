@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SphereViewVolume : AViewVolume
 {
-    public Transform Target;
+    public Transform Character;
     [Min(0)] public float OuterRadius;
     [Min(0)] public float InnerRadius;
 
@@ -10,7 +10,7 @@ public class SphereViewVolume : AViewVolume
 
     private void Update()
     {
-        m_distance = Vector3.Distance(transform.position, Target.position);
+        m_distance = Vector3.Distance(transform.position, Character.position);
         if (m_distance <= OuterRadius && !IsActive)
         {
             SetActive(true);
