@@ -3,6 +3,7 @@
 public class PlayerController : MonoBehaviour
 {
 	public float speed = 10.0f;
+	public Animator m_animator;
 
 	Rigidbody _rigidbody;
 
@@ -23,5 +24,14 @@ public class PlayerController : MonoBehaviour
 		direction += camDir * (Input.GetAxisRaw("Vertical") * Time.fixedDeltaTime);
 		direction.Normalize();
 		_rigidbody.velocity = direction * speed + Vector3.up * _rigidbody.velocity.y;
-	}
+
+		if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+		{
+			m_animator.SetBool("isRunning", true);
+		}
+		else
+		{
+            m_animator.SetBool("isRunning", false);
+        }
+    }
 }

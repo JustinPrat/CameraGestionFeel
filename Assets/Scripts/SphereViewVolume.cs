@@ -31,6 +31,7 @@ public class SphereViewVolume : AViewVolume
         else
         {
             return base.ComputeSelfWeight(remainingWeight) * ((m_distance - InnerRadius) / deltaRadius);
+            return base.ComputeSelfWeight(remainingWeight) * (1- ((m_distance - InnerRadius) / deltaRadius));
         }
     }
 
