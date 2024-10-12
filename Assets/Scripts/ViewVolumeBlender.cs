@@ -41,11 +41,6 @@ public class ViewVolumeBlender : MonoBehaviour
             volume.View.Weight = volume.ComputeSelfWeight(totalWeight);
             totalWeight -= volume.View.Weight;
         }
-        totalWeight = 1f - totalWeight;
-        foreach (AViewVolume volume in allVolumes)
-        {
-            volume.View.Weight *= totalWeight;
-        }
     }
 
     public void AddVolume(AViewVolume volume)

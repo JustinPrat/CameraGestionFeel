@@ -19,8 +19,8 @@ public class PlayerController : MonoBehaviour
 		Vector3 rotatedCamDir = Quaternion.Euler(0, 90, 0) * camDir;
 
 		Vector3 direction = Vector3.zero;
-		direction += Input.GetAxisRaw("Horizontal") * rotatedCamDir;
-		direction += Input.GetAxisRaw("Vertical") * camDir;
+		direction += rotatedCamDir * (Input.GetAxisRaw("Horizontal") * Time.fixedDeltaTime);
+		direction += camDir * (Input.GetAxisRaw("Vertical") * Time.fixedDeltaTime);
 		direction.Normalize();
 		_rigidbody.velocity = direction * speed + Vector3.up * _rigidbody.velocity.y;
 	}
