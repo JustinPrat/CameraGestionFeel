@@ -26,8 +26,12 @@ public class ViewVolumeBlender : MonoBehaviour
         ApplyBlend();
     }
 
-    public void ApplyBlend ()
+    public void ApplyBlend()
     {
+        if (m_activeViewVolumes.Count == 0)
+        {
+            return;
+        }
         List<AViewVolume> allVolumes = new List<AViewVolume>();
         foreach (AViewVolume viewVolume in m_activeViewVolumes)
         {
@@ -35,6 +39,10 @@ public class ViewVolumeBlender : MonoBehaviour
             allVolumes.Add(viewVolume);
         }
         allVolumes.Sort();
+        if (allVolumes[0].View.UsePlayerDirection)
+        {
+            CameraController.Instance.SetCameraDirection(true);
+        }
         float totalWeight = 1f;
         foreach (AViewVolume volume in allVolumes)
         {

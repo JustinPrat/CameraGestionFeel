@@ -6,9 +6,9 @@ public class FreeFollowView : AView
     [Serializable]
     public struct FreeFollowPosition
     {
-        public float Pitch;
-        public float Roll;
-        public float FOV;
+        [Range(-90f, 90f)] public float Pitch;
+        [Range(-180f, 180f)] public float Roll;
+        [Range(0f, 179.99f)] public float FOV;
 
         public static FreeFollowPosition Lerp(FreeFollowPosition from, FreeFollowPosition to, float t)
         {

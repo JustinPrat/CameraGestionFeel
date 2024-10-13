@@ -2,36 +2,38 @@
 
 public class PlayerController : MonoBehaviour
 {
+	private static readonly int IsRunning = Animator.StringToHash("isRunning");
 	public float speed = 10.0f;
 	public Animator m_animator;
 
-	Rigidbody _rigidbody;
+	private bool m_isMoving;
+	private Vector3 m_camDir = Vector3.zero;
+	private Vector3 m_rotatedCamDir = Vector3.zero;
+	
+	[SerializeField] private Rigidbody _rigidbody;
 
 	public void Awake()
 	{
-		_rigidbody = GetComponent<Rigidbody>();
 		Cursor.visible = false;
 	}
 
 	void Update()
     {
-		Vector3 camDir = CameraController.Instance.GetCameraDirection();
-		camDir.y = 0;
-		Vector3 rotatedCamDir = Quaternion.Euler(0, 90, 0) * camDir;
+	    if (!m_isMoving)
+	    {
+		    CameraController.Instance.SetCameraDirection(false);
+	    }
+		m_camDir = CameraController.Instance.GetCameraDirection();
+		m_camDir.y = 0;
+		m_rotatedCamDir = Quaternion.Euler(0, 90, 0) * m_camDir;
 
 		Vector3 direction = Vector3.zero;
-		direction += rotatedCamDir * (Input.GetAxisRaw("Horizontal") * Time.deltaTime);
-		direction += camDir * (Input.GetAxisRaw("Vertical") * Time.deltaTime);
+		direction += m_rotatedCamDir * (Input.GetAxisRaw("Horizontal") * Time.deltaTime);
+		direction += m_camDir * (Input.GetAxisRaw("Vertical") * Time.deltaTime);
 		direction.Normalize();
 		_rigidbody.velocity = direction * speed + Vector3.up * _rigidbody.velocity.y;
 
-		if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-		{
-			m_animator.SetBool("isRunning", true);
-		}
-		else
-		{
-            m_animator.SetBool("isRunning", false);
-        }
+        m_isMoving = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
+		m_animator.SetBool(IsRunning, m_isMoving);
     }
 }

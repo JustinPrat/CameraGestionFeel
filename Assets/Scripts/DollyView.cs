@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class DollyView : AView
 {
-    [SerializeField] private float m_roll;
-    [SerializeField] private float m_distance;
-    [SerializeField] private float m_FOV;
+    [SerializeField, Range(-90f, 90f)] private float m_roll;
+    [SerializeField, Min(0.01f)] private float m_distance;
+    [SerializeField, Range(0f, 179.99f)] private float m_FOV;
     [SerializeField] private Transform m_target;
     [SerializeField] private Rail m_rail;
     [SerializeField, Min(0.01f)] private float m_speed;
@@ -24,6 +24,10 @@ public class DollyView : AView
 
     public override CameraConfiguration GetConfiguration()
     {
+        if (!m_rail)
+        {
+            return new CameraConfiguration();
+        }
         Vector3 position;
         if (m_isAuto)
         {

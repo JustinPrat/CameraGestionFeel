@@ -3,14 +3,14 @@ using UnityEngine;
 public class FixedFollowView : AView
 {
     [Header("Follow Parameters")]
-    [SerializeField] private float m_roll;
-    [SerializeField] private float m_FOV;
+    [SerializeField, Range(-180f, 180f)] private float m_roll;
+    [SerializeField, Range(0f, 179.99f)] private float m_FOV;
     [SerializeField] private Transform m_target;
     
     [Header("Constraint Parameters")]
     [SerializeField] private Transform m_centralPoint;
-    [SerializeField] private float m_yawOffsetMax;
-    [SerializeField] private float m_pitchOffsetMax;
+    [SerializeField , Range(0, 180f)] private float m_yawOffsetMax;
+    [SerializeField, Range(0, 90f)] private float m_pitchOffsetMax;
     
     public override CameraConfiguration GetConfiguration()
     {

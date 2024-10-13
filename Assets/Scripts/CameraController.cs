@@ -21,6 +21,8 @@ public class CameraController : MonoBehaviour
     private List<AView> m_activeViews = new List<AView>();
     private bool m_isCutRequested;
 
+    private bool m_usePlayerDirection;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -90,9 +92,21 @@ public class CameraController : MonoBehaviour
 
     public Vector3 GetCameraDirection ()
     {
-        return (m_currentCameraConfiguration.GetRotation() * Vector3.forward).normalized;
+        if (m_usePlayerDirection)
+        {
+            return m_target.forward;
+        }
+        else
+        {
+            return (m_currentCameraConfiguration.GetRotation() * Vector3.forward).normalized;
+        }
     }
 
+    public void SetCameraDirection(bool useCameraDirection)
+    {
+        m_usePlayerDirection = useCameraDirection;
+    }
+    
     public void RemoveView(AView view)
     {
         m_activeViews.Remove(view);

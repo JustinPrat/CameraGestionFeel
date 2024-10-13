@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,6 +57,24 @@ public class Rail : MonoBehaviour
             }
         }
         return closestPoint;
+    }
+
+    public void GenerateNewRailPoint()
+    {
+        GameObject newRailPoint = new GameObject("RailPoint" + m_railPoints.Count);
+        newRailPoint.transform.parent = transform;
+        if (m_railPoints.Count != 0)
+        {
+            newRailPoint.transform.position = m_railPoints[m_railPoints.Count - 1].position;
+        }
+        else
+        {
+            newRailPoint.transform.localPosition = Vector3.zero;
+        }
+        m_railPoints.Add(newRailPoint.transform);
+        #if UNITY_EDITOR
+        UnityEditor.Selection.activeGameObject = newRailPoint;
+        #endif
     }
     
     private void OnDrawGizmos()

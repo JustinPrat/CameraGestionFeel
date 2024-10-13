@@ -21,7 +21,7 @@ public class AViewVolume : MonoBehaviour, IComparable<AViewVolume>
         return remainingWeight * WeightPercent;
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         UId = NextUid++;
     }
